@@ -1,5 +1,6 @@
 <?  session_start();
-    require_once 'config.php';?>
+    require_once 'config.php';
+    require_once 'content/fields.php';?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,15 +25,14 @@
         <?  if($section=='signup'):?>
             <div class="sign" id="sign_up">
                 <h5>Обязательные поля:</h5>
-                <span><?=Login?></span>
-                    <input placeholder="<?=Login?>" type="text" name="login" value="" />
-                <span><?=Password?></span>
-                <input placeholder="<?=Password?>" type="password" name="password" value="" />
+            <?  putLoginAndPassword($section);?>    
+                <span><?=Email?></span>
+                    <input placeholder="<?=Email?>" type="text" name="email" value="" />
                 <br><h5>Необязательные поля:</h5>
             </div>
         <?  else:?>
             <div class="sign" id="sign_in">
-                ENTER
+                <?  putLoginAndPassword($section);?>                    
             </div>
         <?  endif?>
         </form>
