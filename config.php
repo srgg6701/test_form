@@ -12,7 +12,7 @@ define('PicExt','gif, jpg, png');
 // * недопустимые символы
 // * занятые значения
 // * проблемные записи (напр., - несвпадение паролей при регистрации)
-definee('Invalids',array('invalids','taken','xtra'));
+define('Invalids','invalids,taken,xtra');
 
 if(preg_match('/\/'.LANG2.'\b/',URI))
     $lang=LANG2;

@@ -55,7 +55,8 @@ function fillInputFromSession($name){
     if(isset($_SESSION['valid_data'][$name]))
         echo $_SESSION['valid_data'][$name];
     else{
-        foreach(Invalids as $invalids)
+        $Invalids=explode(",",Invalids);
+        foreach($Invalids as $invalids)
             if($_SESSION[$invalids][$name])
                 echo $_SESSION[$invalids][$name];
     }        

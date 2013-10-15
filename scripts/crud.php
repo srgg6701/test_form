@@ -57,7 +57,13 @@
 	
     // создать массивы неправильных значений
     // (невалидные, занятые, проблемные)
-    foreach (Invalids as $invld)
+    $Invalids=explode(",",Invalids); //'invalids,taken,xtra'
+    // контейнер для полей, содержащих занятые значения, или 
+    // не прошедших проверку на валидность, или для несовпадающих паролей;
+    // далее будут сохраняться в сессии, чтобы при возврате к форме регистрации
+    // оттуда можно было бы извлечь поля для заполнения ячеек:
+    $arrInv=array();
+    foreach ($Invalids as $invld)
         ${$invld} = array();
     // контейнер данных для добавления в таблицу:
     $dataToInsert=array();
@@ -69,7 +75,7 @@
                     $taken[$key]=$val;                    
                 }else{
                     if(preg_match($filters[$key], $val)){
-                        $invalids[$key]=$val;
+                        $arrInv[$key]=$val;
                         showTestValidationResult($key,$val);
                     }else{
                         $dataToInsert[$key]=$val;
@@ -80,14 +86,14 @@
             case 'password'://password2
                 //
                 if(preg_match($filters[$key], $val)){
-                    $invalids[$key]=$val;
+                    $arrInv[$key]=$val;
                     showTestValidationResult($key,$val);
                 }else{
                     $dataToInsert[$key] = md5($val);
                     showTestValidationResult($key,md5($val),true);
                 }
                 if(preg_match($filters[$key], $_POST['password2'])){
-                    $invalids[$key.'2']=$_POST['password2'];
+                    $arrInv[$key.'2']=$_POST['password2'];
                     showTestValidationResult($key.'2',$_POST['password2']);
                 }
                 if($val!=$_POST['password2'])
@@ -100,7 +106,7 @@
                     $taken[$key]=$val;
                 }else{
                     if(!filter_var($val, FILTER_VALIDATE_EMAIL)){
-                        $invalids[$key]=$val;   
+                        $arrInv[$key]=$val;   
                         showTestValidationResult($key,$val);
                     }else{
                         $dataToInsert[$key]=$val;
@@ -111,7 +117,7 @@
             case 'name': case 'phone':
                 //
                 if(preg_match($filters[$key], $val)){
-                    $invalids[$key]=$val;
+                    $arrInv[$key]=$val;
                     showTestValidationResult($key,$val);
                 }else{
                     if($key=='phone') // удалить пробелы в № тел.
@@ -121,8 +127,7 @@
                 }
                 break;
         } 
-    }
-    
+    }    
     
     if($file_data=$_FILES['pic']){
         // проверим расширение загруженного файла:
@@ -135,12 +140,14 @@
     $wrng=0;
     // сохранить невалидные данные в сессии, чтобы показать юзеру при возврате
     // или удалить старые данные из сессии, если всё ОК.
-    foreach(Invalids as $inv) // 'invalids','taken','xtra'
+    
+    foreach($Invalids as $inv) // 'invalids','taken','xtra'
         if(!empty(${$inv})){
             if($test) {
                 echo "<h4>Невалидные данные (".$inv."):</h4>";
                 var_dump(${$inv});
             }
+            if(isset(${$inv}))
             $wrng++;
             $_SESSION[$inv]=${$inv};
         }else{
@@ -205,12 +212,12 @@
         $_SESSION['valid_data']=$dataToInsert;
         if($test){
             echo "<h4>Невалидные данные:</h4>";
-            foreach(Invalids as $inv) // 'invalids','taken','xtra'
+            foreach($Invalids as $inv) // 'invalids','taken','xtra'
                 if(isset($_SESSION[$inv])){
                     echo "<div>{$inv}:</di>";
                     var_dump($_SESSION[$inv]);
                 }
-            echo "<div>redirect: ".SITE_ROOT."</div>";
+            echo "<div>redirect: <a href=\"".SITE_ROOT."\">".SITE_ROOT."</a></div>";
         }else
             header("location: ".SITE_ROOT);
     }
