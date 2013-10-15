@@ -13,7 +13,7 @@ a{
 a:hover{
     text-decoration: underline;
 }
-br{
+br, hr{
     clear: both;
 }
 h5{
@@ -81,6 +81,9 @@ input[type="submit"]{
     margin: 10px auto;
     margin-top: 20px;
     padding: 6px 20px;
+}
+.clearBoth{
+    clear: both;
 }
 .invalid{
     background-color: bisque;

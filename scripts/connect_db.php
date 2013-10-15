@@ -19,12 +19,12 @@ class Db{
 			$dbh = new PDO($dsn, $username, $password);
 			return $dbh;
 		} catch (PDOException $e) {
-			echo 'Connection has failed. The reason is: ' . $e->getMessage();
+			echo 'Подключиться не удалось. Причина: ' . $e->getMessage();
 			return false;
 		} 
 	}
 /**
- * for Insert, Update, Delete queries:
+ * Добавить, удалить, обновить:
  */	
 	public function execute($query){
 		$Db=$this->getConnect();

@@ -47,7 +47,7 @@ $words_content = array(
     'hintName'=>'Буквы, цифры, дефисы и пробелы>Letters, numbers, hyphens, and spaces',        // /[^a-zA-Z0-9\-\s]/ 
     'hintPhoneNumber'=>'Цифры и пробелы (необязательно)>Numbers and spaces (optional)', // /[^0-9\s]/
     'PassDiff'=>'Пароли не совпадают>Passwords are different',
-    ''=>'>',
+    'UploadPic'=>'Вы можете загрузить изображение в форматах>You can upload an image in formats',
     ''=>'>',
     
 );
