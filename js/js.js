@@ -12,6 +12,11 @@ window.onload=function(){
                 if(this.type!='submit'){
                     // удалить класс:
                     this.removeAttribute('class');
+                    if(this.type=='password'){
+                        if(){
+                            
+                        }
+                    }
                 }
             });            
         }
