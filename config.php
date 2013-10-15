@@ -46,7 +46,7 @@ $words_content = array(
     'hintEmail'=>'Укажите свой e-mail>Input here your real e-mail',       // /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
     'hintName'=>'Буквы, цифры, дефисы и пробелы>Letters, numbers, hyphens, and spaces',        // /[^a-zA-Z0-9\-\s]/ 
     'hintPhoneNumber'=>'Цифры и пробелы (необязательно)>Numbers and spaces (optional)', // /[^0-9\s]/
-    ''=>'>',
+    'PassDiff'=>'Пароли не совпадают>Passwords are different',
     ''=>'>',
     ''=>'>',
     

@@ -39,7 +39,17 @@ h5{
 #form 
     input[type="password"]{
     border: solid 1px #9090BE;
-    padding: 3px 6px;
+    padding: 3px 6px;    
+}
+#form 
+    input[type="text"],
+#form 
+    input[type="password"],
+#pass_warning{
+    display: none;
+    background-color: #FF0;
+    margin: -2px auto 6px;
+    padding: 4px;
     width: 60%;
 }
 div >span{
@@ -88,7 +98,7 @@ input[type="submit"]{
     clear: both;
 }
 .sign >span:after,
-.sign >div:after{
+.sign >div:after:not(#pass_warning){
     content: ":";
 }
 .strong{

@@ -28,7 +28,9 @@
         <?  if($section=='signup'):?>
             <div class="sign" id="sign_up">
                 <h5><?=Required?>:</h5>
-            <?  putLoginAndPassword($section);?>    
+            <?  putLoginAndPassword($section);?>
+            	<div id="pass_warning" class="right"><?=PassDiff?></div>
+                <br/>    
                 <span><?=Email?></span>
                     <input class="req" placeholder="<?=hintEmail?>" type="text" id="email" name="email" value="" />
                 <br/>
