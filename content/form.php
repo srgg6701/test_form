@@ -34,7 +34,7 @@
                 <input placeholder="<?=hintPhoneNumber?>" type="text" id="phone" name="phone" value="" />
                 <br/>
                 <hr/>
-                <p><?=UploadPic?> gif, jpg, png:</p>
+                <p><?=UploadPic?> <?=PicExt?>:</p>
                 <input style="width:100%;" name="pic" type="file">
                 <hr/>
             <br/>

@@ -7,6 +7,7 @@ define('LANG1','ru');
 define('LANG2','en');
 define('SIGNIN','signin');
 define('SIGNUP','signup');
+define('PicExt','gif, jpg, png');
 
 if(preg_match('/\/'.LANG2.'\b/',URI))
     $lang=LANG2;
@@ -48,8 +49,7 @@ $words_content = array(
     'hintPhoneNumber'=>'Цифры и пробелы (необязательно)>Numbers and spaces (optional)', // /[^0-9\s]/
     'PassDiff'=>'Пароли не совпадают>Passwords are different',
     'UploadPic'=>'Вы можете загрузить изображение в форматах>You can upload an image in formats',
-    ''=>'>',
-    
+    'WrongPicExt'=>'недопустимое расширение файла изображения>an invalid image extension',    
 );
 
 foreach ($words_content as $mask=>$words){
