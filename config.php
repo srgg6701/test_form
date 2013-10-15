@@ -7,7 +7,7 @@ define('LANG1','ru');
 define('LANG2','en');
 define('SIGNIN','signin');
 define('SIGNUP','signup');
-define('PicExt','gif, jpg, png');
+define('PicExt','gif,jpg,png');
 // типы невалидных данных: 
 // * недопустимые символы
 // * занятые значения
@@ -54,7 +54,17 @@ $words_content = array(
     'hintPhoneNumber'=>'Цифры и пробелы (необязательно)>Numbers and spaces (optional)', // /[^0-9\s]/
     'PassDiff'=>'Пароли не совпадают>Passwords are different',
     'UploadPic'=>'Вы можете загрузить изображение в форматах>You can upload an image in formats',
-    'WrongPicExt'=>'недопустимое расширение файла изображения>an invalid image extension',    
+    'WrongLogin'=>'Недопустимые символы в логине>Invalid login',    
+    'WrongPassword'=>'Недопустимые символы в пароле>Invalid password',    
+    // PassDiff
+    'WrongEmail'=>'Недопустимый e-mail>Invalid e-mail',    
+    'WrongName'=>'Недопустимые символы в имени пользователя>Invalid name',    
+    'WrongPhoneNumber'=>'Недопустимый формат № телефона>Invalid phone number',        
+    'WrongPicExt'=>'Недопустимое расширение файла изображения>Invalid image extension', 
+    'WrongFieldsValues'=>'Недопустимые значения полей>Invalid fields values',
+    'TakenValues'=>'Значения, занятые другими пользователями>Fields values taken by other users',
+    'ErrorDuringRegister'=>'Во время регистрации возникли ошибки. Пожалуйста, исправьте их и попробуйте снова>Some errors occurred while registration. Please, fix them and try again',
+    'OtherErrors'=>'Прочие ошибки>Other errors'
 );
 
 foreach ($words_content as $mask=>$words){

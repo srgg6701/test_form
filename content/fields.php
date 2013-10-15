@@ -7,12 +7,12 @@ function putLoginAndPassword($section){?>
     <? 
     $setPass=function($second_name=null) use ($section){ 
 	?>
-    <input class="req" autocomplete="off"<?
+    <input autocomplete="off"<?
 		if($section==SIGNUP){
 			?> placeholder="<?=hintPassword?>"<? 
 		}?> type="password" id="password<? 
             echo $second_name;?>" name="password<?
-            echo $second_name;?>" value="<? fillInputFromSession('password');?>" />  
+            echo $second_name;?>" <? fillInputFromSession('password', true);?> />  
 <?  };
     if($section==SIGNIN){
     ?>
@@ -26,10 +26,10 @@ function putLoginAndPassword($section){?>
     </span>
 <?  }
 ?>
-    <input class="req" autocomplete="off"<?
+    <input autocomplete="off"<?
 	if($section==SIGNUP){
 		?> placeholder="<?=hintLogin?>"<? 
-	}?> type="text" id="login" name="login" value="<? fillInputFromSession('login');?>" />
+	}?> type="text" id="login" name="login" <? fillInputFromSession('login', true);?> />
     <?  
     if($section==SIGNIN){
         ?>
@@ -51,13 +51,26 @@ function putLoginAndPassword($section){?>
  * Заполнить значения формы данными (включая  невалидные), размещёнными в сессии
  * в случае возврата к заполнению формы из-за обнаруженных невалидных данных:
  */
-function fillInputFromSession($name){
+function fillInputFromSession($name,$req=false){
+    $xtraClass=null; // имя класса для дополнительной раскраски ячеек, чтоб юзер 
+    //мог видеть, какие значения заняты, какие - невалидны
+    echo 'value="';
     if(isset($_SESSION['valid_data'][$name]))
         echo $_SESSION['valid_data'][$name];
     else{
-        $Invalids=explode(",",Invalids);
-        foreach($Invalids as $invalids)
-            if($_SESSION[$invalids][$name])
+        $Invalids=explode(",",Invalids); // invalids,taken,xtra
+        foreach($Invalids as $invalids){
+            if($_SESSION[$invalids][$name]){
                 echo $_SESSION[$invalids][$name];
-    }        
+                $xtraClass=" {$invalids}";
+                break;
+            }else
+                $xtraClass=null;
+        }
+    }
+    echo '"';
+    if($req) 
+        echo " class=\"req{$xtraClass}\"";
+    elseif($xtraClass)
+        echo " class=\"$xtraClass\"";
 }

@@ -23,7 +23,7 @@ window.onload=function(){
             // добавить наблюдателя к полю:
             inputs[i].addEventListener('focus',function(){
                 if(this.type!='submit'){
-                    // удалить класс:
+                    // назначить класс:
                     this.setAttribute('class', 'req');                    
                 }
             });            
@@ -61,7 +61,6 @@ function checkPasswordsIdentity(blur) {
     if( userForm.pass1.value && userForm.pass2.value    // оба поля заполнены 
         && (userForm.pass1.value!=userForm.pass2.value) // значения различаются
       ){
-        console.log('Пароли не совпадают!');
         userForm.pass1.setAttribute('class', 'req invalid');
         userForm.pass2.setAttribute('class', 'req invalid');
         userForm.wrnBlock.style.display='block';
@@ -105,11 +104,9 @@ function validateForm() {
         var checkFiltered = function(element){            
             if(filters[element.id].test(element.value)){
                 if(element.id=='email'){
-                    //console.log('value = '+element.value+', filter = '+filters[element.id]);
                     // 0 ошибок:
                     return 0;
                 }else{
-                    //console.log('invalid! '+element.id+': '+element.value);
                     setInvalid(element);
                     // вернуть ошибку:
                     return 1;
@@ -127,12 +124,9 @@ function validateForm() {
         var currentInput, err=0, inputs = userForm.inputs;         
         for(var i = 0, j=inputs.length; i<j; i++){
             currentInput = inputs[i];
-            console.log('current element.id: '+currentInput.id);
             if(currentInput.getAttribute('type')!='submit'){
-                console.log('type = '+currentInput.getAttribute('type')+', value = '+currentInput.value+', req = ');
                 if(!currentInput.value){
                     if(currentInput.getAttribute('class').indexOf('req')!=-1){                
-                        console.log('invalid! No required value!');
                         err++;
                         setInvalid(currentInput);
                     }

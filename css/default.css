@@ -23,6 +23,34 @@ h5{
     text-align: center;
     white-space: nowrap;
 }
+div >span{
+    float: left;
+    line-height: 28px;
+    padding: 2px 6px;
+    text-align: right;
+    width: 40%;
+}
+div >span >span{
+    border-bottom: dashed 1px #52449C;
+    cursor: help;
+    padding-bottom: 1px;
+}
+input[type="text"],
+input[type="password"],
+.right{
+    float: right;
+}
+input[type="submit"]{
+    clear: both;
+    display: block;
+    margin: 10px auto;
+    margin-top: 20px;
+    padding: 6px 20px;
+}
+ul b{
+    display: block;
+    margin: auto auto 5px -30px;
+}
 #form > div{
     margin: auto;
     max-width: 400px;
@@ -54,40 +82,19 @@ h5{
     display: none;
     background-color: #FF0;
 }
-div >span{
-    float: left;
-    line-height: 28px;
-    padding: 2px 6px;
-    text-align: right;
-    width: 40%;
-}
-div >span >span{
-    border-bottom: dashed 1px #52449C;
-    cursor: help;
-    padding-bottom: 1px;
-}
 #lang *{
     text-align: center;
     width: auto;
 }
-input[type="text"],
-input[type="password"],
-.right{
-    float: right;
-}
-input[type="submit"]{
-    clear: both;
-    display: block;
-    margin: 10px auto;
-    margin-top: 20px;
-    padding: 6px 20px;
-}
 .clearBoth{
     clear: both;
 }
-.invalid{
+.invalid, .invalids{
     background-color: bisque;
     border-color: red !important;
+}
+.txtRed{
+    color: red;
 }
 .sign{
     background-color: #EAE4FA;
@@ -108,4 +115,10 @@ input[type="submit"]{
 }
 .strong{
     font-weight: bold;
+}
+.taken{
+    background-color: #e6e6e6;
+}
+.xtra{
+    background-color: lightyellow;
 }

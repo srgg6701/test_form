@@ -5,22 +5,6 @@
         var_dump($post);
         var_dump($_FILES['pic']);
     }
-    //die();
-    /*  array   'login' => string 'Logos' (length=5)
-                'password' => string 'history' (length=7)
-                'password2' => string 'history' (length=7)
-                'email' => string 'logos@mail.ru' (length=13)
-                'name' => string 'Серя' (length=8)
-                'phone' => string '89044428447' (length=11)
-                'btnSubmit' => string 'Sign up' (length=7)
-              array
-                'name' => string 'mysql_error.gif' (length=15)
-                'type' => string 'image/gif' (length=9)
-                'tmp_name' => string 'Z:\tmp\phpCA64.tmp' (length=18)
-                'error' => int 0
-                'size' => int 15161
-    */
-    
     /**
      * Проверить уникальность записи (логин, емэйл)
      */
@@ -58,13 +42,8 @@
     // создать массивы неправильных значений
     // (невалидные, занятые, проблемные)
     $Invalids=explode(",",Invalids); //'invalids,taken,xtra'
-    // контейнер для полей, содержащих занятые значения, или 
-    // не прошедших проверку на валидность, или для несовпадающих паролей;
-    // далее будут сохраняться в сессии, чтобы при возврате к форме регистрации
-    // оттуда можно было бы извлечь поля для заполнения ячеек:
-    $arrInv=array();
     foreach ($Invalids as $invld)
-        ${$invld} = array();
+        ${$invld} = array(); //$invalids, $taken, $xtra
     // контейнер данных для добавления в таблицу:
     $dataToInsert=array();
     foreach ($post as $key => $val){        
@@ -75,7 +54,7 @@
                     $taken[$key]=$val;                    
                 }else{
                     if(preg_match($filters[$key], $val)){
-                        $arrInv[$key]=$val;
+                        $invalids[$key]=$val;
                         showTestValidationResult($key,$val);
                     }else{
                         $dataToInsert[$key]=$val;
@@ -86,18 +65,18 @@
             case 'password'://password2
                 //
                 if(preg_match($filters[$key], $val)){
-                    $arrInv[$key]=$val;
+                    $invalids[$key]=$val;
                     showTestValidationResult($key,$val);
                 }else{
                     $dataToInsert[$key] = md5($val);
                     showTestValidationResult($key,md5($val),true);
                 }
                 if(preg_match($filters[$key], $_POST['password2'])){
-                    $arrInv[$key.'2']=$_POST['password2'];
+                    $invalids[$key.'2']=$_POST['password2'];
                     showTestValidationResult($key.'2',$_POST['password2']);
                 }
                 if($val!=$_POST['password2'])
-                    $xtra[]=PassDiff;
+                    $xtra['pass_diff']=PassDiff;
                 
                 break;
             case 'email':
@@ -106,7 +85,7 @@
                     $taken[$key]=$val;
                 }else{
                     if(!filter_var($val, FILTER_VALIDATE_EMAIL)){
-                        $arrInv[$key]=$val;   
+                        $invalids[$key]=$val;   
                         showTestValidationResult($key,$val);
                     }else{
                         $dataToInsert[$key]=$val;
@@ -114,42 +93,64 @@
                     }
                 }
                 break;
-            case 'name': case 'phone':
-                //
+            case 'name': 
                 if(preg_match($filters[$key], $val)){
-                    $arrInv[$key]=$val;
+                    $invalids[$key]=$val;
                     showTestValidationResult($key,$val);
                 }else{
-                    if($key=='phone') // удалить пробелы в № тел.
-                        $val = str_replace(" ", "", $val);
                     $dataToInsert[$key]=$val;
                     showTestValidationResult($key,$val, true);
                 }
-                break;
+            break;
+            case 'phone':
+                //
+                if(preg_match($filters[$key], $val)){
+                    $invalids[$key]=$val;
+                    showTestValidationResult($key,$val);
+                }else{
+                    $val = str_replace(" ", "", $val);
+                    $dataToInsert[$key]=$val;
+                    showTestValidationResult($key,$val, true);
+                }
+            break;
         } 
     }    
-    
+    /**
+     *  Выяснить, является ли валидным расширение загруженного файла. 
+     *  Если нет, будем возвращаться назад - к форме заполнения данных
+     */
     if($file_data=$_FILES['pic']){
         // проверим расширение загруженного файла:
         $arr_fname=explode(".",$file_data['name']);
         $ext = array_pop($arr_fname);
-        if(!in_array($ext, explode(",",PicExt)))
-            $xtra[]=WrongPicExt;
+        if(!in_array($ext, explode(",",PicExt))){
+            $xtra['wrong_pic']=WrongPicExt; // дополним один из массивов невалидных полей
+            echo "<h2>ext = $ext</h2>";
+        }
     }
     
     $wrng=0;
     // сохранить невалидные данные в сессии, чтобы показать юзеру при возврате
     // или удалить старые данные из сессии, если всё ОК.
-    
     foreach($Invalids as $inv) // 'invalids','taken','xtra'
-        if(!empty(${$inv})){
+        if(!empty(${$inv})){ // $invalids, $taken, $xtra
             if($test) {
                 echo "<h4>Невалидные данные (".$inv."):</h4>";
                 var_dump(${$inv});
             }
-            if(isset(${$inv}))
             $wrng++;
-            $_SESSION[$inv]=${$inv};
+            /*  данные пароля добавлять в сессию не будем, поскольку:
+                - пароли при возврате не сохраняют
+                - он уже обработан функцией md5()
+            */
+            if( $inv=='invalids'
+                && (isset($invalids['password'])||isset($invalids['password2']))
+              ) {
+                //unset($_SESSION['invalids']['password']);
+                //unset($_SESSION['invalids']['password2']);
+                continue;
+            }else
+                $_SESSION[$inv]=${$inv};
         }else{
             if($test) echo "<div>unset (\$_SESSION[$inv]) </div>";
             unset($_SESSION[$inv]);
@@ -178,7 +179,7 @@
             $last_id=getLastId();
         }
                 
-        if($file_data){ // если всё ОК и есть файлы, будем размещать их:
+        if($file_data&&!isset($xtra['wrong_pic'])){ // если всё ОК и есть файлы, будем размещать их:
             /*  заменим все подозрительные символы в имени файла.
                 Это нужно нам только для информативных целей. Сам файл будет 
                 сохранён под именем последней добавленной в таблицу записи */
@@ -196,7 +197,7 @@
             }
             $file_location = dirname(__FILE__).'/../content/files/'.$last_id.'.'.$ext;            
             // сохранить файл под индексом записи для него в таблице pix
-            if ( !move_uploaded_file($file_data['tmp_name'], $file_location )) 
+            if (!move_uploaded_file($file_data['tmp_name'], $file_location )) 
                 echo "<div style='color:orange'>...Ошибка загрузки файла $file_location</div>";
 
         }
@@ -209,15 +210,17 @@
             сессии валидны, а какие - нет. */
         unset($_SESSION['valid_data']);
     }else{
+        unset($dataToInsert['password']);
+        unset($dataToInsert['password2']);
         $_SESSION['valid_data']=$dataToInsert;
         if($test){
             echo "<h4>Невалидные данные:</h4>";
             foreach($Invalids as $inv) // 'invalids','taken','xtra'
                 if(isset($_SESSION[$inv])){
-                    echo "<div>{$inv}:</di>";
+                    echo "<div><b>{$inv}:</b></di>";
                     var_dump($_SESSION[$inv]);
                 }
-            echo "<div>redirect: <a href=\"".SITE_ROOT."\">".SITE_ROOT."</a></div>";
+            echo "<div>redirect: <a href=\"".SITE_ROOT."return\">".SITE_ROOT."return</a></div><hr>";
         }else
-            header("location: ".SITE_ROOT);
+            header("location: ".SITE_ROOT."return");
     }
