@@ -176,7 +176,7 @@
         // получить id последней добавленной записи в таблицу юзеров, чтобы далее
         // ассоциировать с ним файл, данные которого сохранены в таблице pix:
         if(!$last_id=$Db->getConnect()->lastInsertId()){
-            $last_id=getLastId();
+            $_SESSION['user_id']=$last_id=getLastId();            
         }
                 
         if($file_data&&!isset($xtra['wrong_pic'])){ // если всё ОК и есть файлы, будем размещать их:
@@ -209,6 +209,8 @@
             т.о., при заполнении ячеек мы должны знать, какие из сохранённых в
             сессии валидны, а какие - нет. */
         unset($_SESSION['valid_data']);
+        header("location: ".SITE_ROOT."account/?register=ok");
+        
     }else{
         unset($dataToInsert['password']);
         unset($dataToInsert['password2']);

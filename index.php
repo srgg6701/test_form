@@ -24,8 +24,8 @@
 		<script type="text/javascript" src="js/js.js"></script>
     </head>
     <body> 
-    <? 	$file_name=(isset($post['btnSubmit']))? 
-			'account':'form';
+    <? 	$file_name=(isset($post['btnSubmit'])||strstr($_SERVER['REQUEST_URI'], '/account'))? 
+			'account':'form'; 
 		require_once 'content/'.$file_name.'.php';?>
     </body>
 </html>
