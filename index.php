@@ -12,7 +12,16 @@
     <?  if($section==SIGNIN):?>
         <link href="css/signin.css" rel="stylesheet"/>
     <?  endif;?>
-        <script type="text/javascript" src="js/js.js"></script>
+		<script>
+		var filters = [];
+		// создать фильтры для валидации значений полей:
+	<?	foreach($filters as $filter=>$pattern):
+	?>
+	filters['<?=$filter?>']=<?=$pattern?>;
+	<?	endforeach;
+	?>
+	</script>
+		<script type="text/javascript" src="js/js.js"></script>
     </head>
     <body> 
     <? 	$file_name=(isset($post['btnSubmit']))? 

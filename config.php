@@ -60,4 +60,12 @@ foreach ($words_content as $mask=>$words){
     define($mask,$content);
 }
 
+// создать универсальные (php/js) фильтры валидации:
+$filters = array(
+    'login'         =>"/[^a-zA-Z0-9\-_\.]/",
+    'password'      =>"/[^a-zA-Z0-9]/",
+    'email'         =>"/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/",
+    'name'          =>"/[^а-яёА-ЯЁa-zA-Z0-9\-\s]/",
+    'phone'         =>"/[^0-9\s]/"
+);
 ?>

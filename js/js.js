@@ -97,13 +97,6 @@ function checkCells() {
  */
 function validateForm() {
     try{
-        var filters = [];
-        // создать фильтры для валидации значений полей:
-        filters['login']=/[^a-zA-Z0-9\-_\.]/;
-        filters['password']=/[^a-zA-Z0-9]/;
-        filters['email']=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        filters['name']=/[^а-яёА-ЯЁa-zA-Z0-9\-\s]/;
-        filters['phone']=/[^0-9\s]/;
         // создадим функцию назначения полю с невалидным значением соответствующего класса:
         var setInvalid = function(element){
             console.log('element.id = '+element.id);
