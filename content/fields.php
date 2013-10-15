@@ -10,7 +10,9 @@ function putLoginAndPassword($section){?>
     <input class="req" autocomplete="off"<?
 		if($section==SIGNUP){
 			?> placeholder="<?=hintPassword?>"<? 
-		}?> type="password" id="password<?=$second_name?>" name="password<?=$second_name?>" value="" />  
+		}?> type="password" id="password<? 
+            echo $second_name;?>" name="password<?
+            echo $second_name;?>" value="<? fillInputFromSession('password');?>" />  
 <?  };
     if($section==SIGNIN){
     ?>
@@ -27,7 +29,7 @@ function putLoginAndPassword($section){?>
     <input class="req" autocomplete="off"<?
 	if($section==SIGNUP){
 		?> placeholder="<?=hintLogin?>"<? 
-	}?> type="text" id="login" name="login" value="" />
+	}?> type="text" id="login" name="login" value="<? fillInputFromSession('login');?>" />
     <?  
     if($section==SIGNIN){
         ?>
@@ -43,4 +45,18 @@ function putLoginAndPassword($section){?>
     <span><?=Password2?></span>
     <?  $setPass(2);
     }    
+}
+
+/**
+ * Заполнить значения формы данными (включая  невалидные), размещёнными в сессии
+ * в случае возврата к заполнению формы из-за обнаруженных невалидных данных:
+ */
+function fillInputFromSession($name){
+    if(isset($_SESSION['valid_data'][$name]))
+        echo $_SESSION['valid_data'][$name];
+    else{
+        foreach(Invalids as $invalids)
+            if($_SESSION[$invalids][$name])
+                echo $_SESSION[$invalids][$name];
+    }        
 }

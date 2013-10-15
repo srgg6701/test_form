@@ -8,6 +8,11 @@ define('LANG2','en');
 define('SIGNIN','signin');
 define('SIGNUP','signup');
 define('PicExt','gif, jpg, png');
+// типы невалидных данных: 
+// * недопустимые символы
+// * занятые значения
+// * проблемные записи (напр., - несвпадение паролей при регистрации)
+definee('Invalids',array('invalids','taken','xtra'));
 
 if(preg_match('/\/'.LANG2.'\b/',URI))
     $lang=LANG2;

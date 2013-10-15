@@ -21,17 +21,17 @@
             <div id="pass_warning" class="right"><?=PassDiff?></div>
             <br/>    
             <span><?=Email?></span>
-                <input class="req" placeholder="<?=hintEmail?>" type="text" id="email" name="email" value="" />
+                <input class="req" placeholder="<?=hintEmail?>" type="text" id="email" name="email" value="<? fillInputFromSession('email');?>" />
             <br/>
             <h5><?=Optional?>:</h5>
             <span>
                 <span title="<?=hintName?>"><?=Name?></span>
             </span>
-                <input placeholder="<?=hintName?>" type="text" id="name" name="name" value="" />
+                <input placeholder="<?=hintName?>" type="text" id="name" name="name" value="<? fillInputFromSession($name);?>" />
             <span>    
                 <span title="<?=hintPhoneNumber?>"><?=PhoneNumber?></span>
             </span>
-                <input placeholder="<?=hintPhoneNumber?>" type="text" id="phone" name="phone" value="" />
+                <input placeholder="<?=hintPhoneNumber?>" type="text" id="phone" name="phone" value="<? fillInputFromSession('phone');?>" />
                 <br/>
                 <hr/>
                 <p><?=UploadPic?> <?=PicExt?>:</p>

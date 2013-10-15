@@ -34,6 +34,13 @@
         return $cnt;
     }
     /**
+     * Если не можем получить last_insert_id прямо:
+     */
+    function getLastId($table='users'){
+        global $connect,$test;
+        return $connect->query("SELECT MAX(id) FROM $table")->fetchColumn();
+    }
+    /**
      * Вывести результат валидации в тестовом режиме:
      */
     function showTestValidationResult($key,$val,$valid=true){
@@ -49,9 +56,8 @@
 	$connect=$Db->getConnect();
 	
     // создать массивы неправильных значений
-    $invlds=array('invalids','taken','xtra');
     // (невалидные, занятые, проблемные)
-    foreach ($invlds as $invld)
+    foreach (Invalids as $invld)
         ${$invld} = array();
     // контейнер данных для добавления в таблицу:
     $dataToInsert=array();
@@ -114,13 +120,9 @@
                     showTestValidationResult($key,$val, true);
                 }
                 break;
-            /*case 'phone':
-                //
-                if(!preg_match($filters[$key], $val))
-                    $invalids[]=$key;
-                break;*/
         } 
     }
+    
     
     if($file_data=$_FILES['pic']){
         // проверим расширение загруженного файла:
@@ -133,10 +135,10 @@
     $wrng=0;
     // сохранить невалидные данные в сессии, чтобы показать юзеру при возврате
     // или удалить старые данные из сессии, если всё ОК.
-    foreach($invlds as $inv) // 'invalids','taken','xtra'
+    foreach(Invalids as $inv) // 'invalids','taken','xtra'
         if(!empty(${$inv})){
             if($test) {
-                echo "<h4>Невалидные данные:</h4>";
+                echo "<h4>Невалидные данные (".$inv."):</h4>";
                 var_dump(${$inv});
             }
             $wrng++;
@@ -158,18 +160,23 @@
                 VALUES (".$values.", '".date('Y-m-d H:i:s')."')";
         try{
             if($test) echo "<pre>$query</pre>";
-            $Db->execute($query);
+            $Db->execute($query);            
         }catch(PDOExecption $e){
             echo 'Ошибка добавления записи: '.$e->getMessage();
             die();
         }
+        // получить id последней добавленной записи в таблицу юзеров, чтобы далее
+        // ассоциировать с ним файл, данные которого сохранены в таблице pix:
+        if(!$last_id=$Db->getConnect()->lastInsertId()){
+            $last_id=getLastId();
+        }
                 
         if($file_data){ // если всё ОК и есть файлы, будем размещать их:
-            // заменим все подозрительные символы в имени файла
-            // оно нужно нам только для информативных целей. Сам файл будет 
-            // сохранён под именем последней добавленной в таблицу записи
+            /*  заменим все подозрительные символы в имени файла.
+                Это нужно нам только для информативных целей. Сам файл будет 
+                сохранён под именем последней добавленной в таблицу записи */
             $file_name = preg_replace("/[^а-яёА-ЯЁa-zA-Z0-9\-\._]/", "", $file_data['name']);
-            $query="INSERT INTO pix (filename,user_id) VALUES ('$file_name',".$Db->getConnect()->lastInsertId().")";
+            $query="INSERT INTO pix (filename,user_id) VALUES ('$file_name',".$last_id.")";
             try{
                 if($test) echo "<pre>$query</pre>";
                 $Db->execute($query);
@@ -177,23 +184,33 @@
                 echo 'Ошибка добавления записи: '.$e->getMessage();
                 die();
             }
-            $file_location = '../content/files/'.$Db->getConnect()->lastInsertId().'.'.$ext;            
+            if(!$last_id=$Db->getConnect()->lastInsertId()){
+                $last_id=getLastId();
+            }
+            $file_location = dirname(__FILE__).'/../content/files/'.$last_id.'.'.$ext;            
+            // сохранить файл под индексом записи для него в таблице pix
             if ( !move_uploaded_file($file_data['tmp_name'], $file_location )) 
                 echo "<div style='color:orange'>...Ошибка загрузки файла $file_location</div>";
-            // сохранить файл под индексом записи для него в таблице pix
-            /*
-            'name' => string 'mysql_error.gif' (length=15)
-            'type' => string 'image/gif' (length=9)
-            'tmp_name' => string 'Z:\tmp\phpCA64.tmp' (length=18)
-            'error' => int 0
-            'size' => int 15161*/
+
         }
+        /*  удалим ранее сохранённые валидные данные (если есть).
+            Они создаются в случае, если есть также и НЕвалидные данные.
+            Это нужно для того, чтобы заполнить поля формы при возврате после
+            того, как невалидные данные были обнаружены. Потому что система
+            должна назначать соответствующий стилевой атрибут невалидным данным,
+            т.о., при заполнении ячеек мы должны знать, какие из сохранённых в
+            сессии валидны, а какие - нет. */
+        unset($_SESSION['valid_data']);
     }else{
+        $_SESSION['valid_data']=$dataToInsert;
         if($test){
             echo "<h4>Невалидные данные:</h4>";
-            foreach($invlds as $inv) // 'invalids','taken','xtra'
-                if(isset($_SESSION[$inv]))
+            foreach(Invalids as $inv) // 'invalids','taken','xtra'
+                if(isset($_SESSION[$inv])){
+                    echo "<div>{$inv}:</di>";
                     var_dump($_SESSION[$inv]);
+                }
+            echo "<div>redirect: ".SITE_ROOT."</div>";
         }else
             header("location: ".SITE_ROOT);
     }
