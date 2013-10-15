@@ -46,11 +46,13 @@ h5{
 #form 
     input[type="password"],
 #pass_warning{
-    display: none;
-    background-color: #FF0;
     margin: -2px auto 6px;
     padding: 4px;
     width: 60%;
+}
+#pass_warning{
+    display: none;
+    background-color: #FF0;
 }
 div >span{
     float: left;

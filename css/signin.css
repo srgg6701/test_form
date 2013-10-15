@@ -1,6 +1,9 @@
 .sign >div{
     margin: 10px;
 }
+.sign >div:after{
+    content: ":";
+}
 .sign input[type="text"],
 .sign input[type="password"]{
     float: none;

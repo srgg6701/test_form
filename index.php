@@ -13,7 +13,11 @@
         <script type="text/javascript" src="js/js.js"></script>
     </head>
     <body>        
-        <form method="post" id="form" onsubmit="return validateForm()">
+        <form method="post" id="form" onsubmit="return <? 
+		if($section==SIGNUP):
+			?>validateForm<?
+		else:?>checkCells<?
+		endif;?>()">
             <div id="lang">
                 <span class="strong">
                     <a href="<?=SITE_ROOT?>signup"><?=Signup?></a>
@@ -50,7 +54,7 @@
             <div class="sign" id="sign_in">
                 <?  putLoginAndPassword($section);?>                    
                 <br/>
-                <input id="btnSubmit" type="submit" value="<?=Enter?>">
+                <input id="btnEnter" type="submit" value="<?=Enter?>">
             </div>
         <?  endif?>
         </form>

@@ -5,8 +5,12 @@
  */
 function putLoginAndPassword($section){?>
     <? 
-    $setPass=function($second_name=null){?>
-    <input class="req" autocomplete="off" placeholder="<?=hintPassword?>" type="password" id="password<?=$second_name?>" name="password<?=$second_name?>" value="" />  
+    $setPass=function($second_name=null) use ($section){ 
+	?>
+    <input class="req" autocomplete="off"<?
+		if($section==SIGNUP){
+			?> placeholder="<?=hintPassword?>"<? 
+		}?> type="password" id="password<?=$second_name?>" name="password<?=$second_name?>" value="" />  
 <?  };
     if($section==SIGNIN){
     ?>
@@ -20,7 +24,10 @@ function putLoginAndPassword($section){?>
     </span>
 <?  }
 ?>
-    <input class="req" autocomplete="off" placeholder="<?=hintLogin?>" type="text" id="login" name="login" value="" />
+    <input class="req" autocomplete="off"<?
+	if($section==SIGNUP){
+		?> placeholder="<?=hintLogin?>"<? 
+	}?> type="text" id="login" name="login" value="" />
     <?  
     if($section==SIGNIN){
         ?>
