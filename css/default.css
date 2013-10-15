@@ -42,12 +42,17 @@ h5{
     padding: 3px 6px;
     width: 60%;
 }
-span{
+div >span{
     float: left;
-    line-height: 24px;
+    line-height: 28px;
     padding: 2px 6px;
     text-align: right;
     width: 40%;
+}
+div >span >span{
+    border-bottom: dashed 1px #52449C;
+    cursor: help;
+    padding-bottom: 1px;
 }
 #lang *{
     text-align: center;
@@ -58,10 +63,33 @@ input[type="password"],
 .right{
     float: right;
 }
+input[type="submit"]{
+    clear: both;
+    display: block;
+    margin: 10px auto;
+    margin-top: 20px;
+    padding: 6px 20px;
+}
+.invalid{
+    background-color: bisque;
+    border-color: red !important;
+}
 .sign{
     background-color: #EAE4FA;
     border-radius: 8px;
     border: solid 2px #9D95B3;
+}
+.sign >span, 
+.sign >div{
+    clear: left;
+    white-space: nowrap;
+}
+.sign >div{
+    clear: both;
+}
+.sign >span:after,
+.sign >div:after{
+    content: ":";
 }
 .strong{
     font-weight: bold;

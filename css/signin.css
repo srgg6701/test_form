@@ -1,0 +1,12 @@
+.sign >div{
+    margin: 10px;
+}
+.sign input[type="text"],
+.sign input[type="password"]{
+    float: none;
+    width: 100% !important;
+}
+span>span{
+    border-bottom: none;
+    cursor: text;
+}
