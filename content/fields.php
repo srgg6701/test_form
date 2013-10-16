@@ -8,7 +8,7 @@ function putLoginAndPassword($section){?>
     <? 
     $setPass=function($second_name=null) use ($section){ 
 	?>
-    <input autocomplete="off"<?
+    <input required autocomplete="off"<?
 		if($section==SIGNUP){
 			?> placeholder="<?=hintPassword?>"<? 
 		}?> type="password" id="password<? 
@@ -27,7 +27,7 @@ function putLoginAndPassword($section){?>
     </span>
 <?  }
 ?>
-    <input autocomplete="off"<?
+    <input required autocomplete="off"<?
 	if($section==SIGNUP){
 		?> placeholder="<?=hintLogin?>"<? 
 	}?> type="text" id="login" name="login" <? fillInputFromSession('login', true);?> />
@@ -47,7 +47,6 @@ function putLoginAndPassword($section){?>
     <?  $setPass(2);
     }    
 }
-
 /**
  * Заполнить значения формы данными (включая  невалидные), размещёнными в сессии
  * в случае принудительного возврата к заполнению формы из-за обнаруженных проблем:
@@ -75,7 +74,6 @@ function fillInputFromSession($name,$req=false){
     elseif($xtraClass)
         echo " class=\"$xtraClass\"";
 }
-
 /**
  * Аутентифицировать юзера:
  */

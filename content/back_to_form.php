@@ -1,7 +1,7 @@
         <div>
             <p class="txtRed"><?=ErrorDuringRegister?>:</p>
             <ul>
-    	<?	$showInvalids=function($invalids){
+    	<?	$showInvalids=function($invalids){ // выбираются из константы
 				if($invalids=='xtra'):?>
                 <b><?=OtherErrors?>:</b>
 			<?	endif;

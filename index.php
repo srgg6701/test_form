@@ -1,9 +1,6 @@
 <?  session_start();
     require_once 'config.php';
-    require_once 'content/fields.php';
-	if($post=$_POST) 
-        if($post['btnSubmit'])
-            require_once 'scripts/crud.php';?>
+    require_once 'content/fields.php';	?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,7 +22,7 @@
 		<script type="text/javascript" src="js/js.js"></script>
     </head>
     <body> 
-    <?  $file_name=(isset($post['btnEnter'])||strstr($_SERVER['REQUEST_URI'], '/account'))? 
+    <?  $file_name=(isset($_POST['btnEnter'])||strstr($_SERVER['REQUEST_URI'], '/account'))? 
 			'account':'form'; 
 		require_once 'content/'.$file_name.'.php';?>
     </body>

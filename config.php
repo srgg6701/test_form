@@ -1,6 +1,8 @@
 <?php
-if(strstr($_SERVER['REQUEST_URI'],'/exit'))
+if(strstr($_SERVER['REQUEST_URI'],'/exit')){
     session_destroy(); //var_dump($_SESSION);
+    session_start();
+}
 if(!isset($_SESSION['ROOT']))
     $_SESSION['ROOT']='http://localhost/_temp/test/smithandpartners/';
 define('SITE_ROOT', $_SESSION['ROOT']);
@@ -31,7 +33,7 @@ if(!$lang){
 }
 
 $section = (preg_match('/\/signin\b/',URI))?  SIGNIN: SIGNUP;
-// добавить маски для контента (рус/англ):
+// Создадим рус-англ. словарь:
 $words_content = array(
     'Signup'=>'Регистрация>Sign Up',
     'Signin'=>'Вход>Sign In',
@@ -92,7 +94,6 @@ $filters = array(
     'login'         =>"/[^a-zA-Z0-9\-_\.]/",
     'password'      =>"/[^a-zA-Z0-9]/",
     'email'         =>"/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/",
-    'name'          =>"/[^а-яёА-ЯЁa-zA-Z0-9\-\s]/",
+    'name'          =>"/[^[^а-пр-яА-ПР-Яa-zA-Z0-9\-\s]/",
     'phone'         =>"/[^0-9\s]/"
-);
-?>
+);?>

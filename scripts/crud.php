@@ -1,8 +1,10 @@
-<?	require_once 'connect_db.php';
-
-    $test=false;
+<?	session_start();
+    require_once '../config.php';
+    require_once 'connect_db.php';
+    
+    $test=true;
 	if($test){
-        var_dump($post);
+        var_dump($_POST);
         var_dump($_FILES['pic']);
     }
     /**
@@ -52,7 +54,7 @@
     //echo "<hr>";
     // контейнер данных для добавления в таблицу:
     $dataToInsert=array();
-    foreach ($post as $key => $val){        
+    foreach ($_POST as $key => $val){        
         switch ($key){
             case 'login':
                 // проверить логин на уникальность:
@@ -100,10 +102,7 @@
                 }
                 break;
             case 'name': 
-                //$filters[$key]
-                $pattern='/^[а-яёА-ЯЁa-zA-Z0-9\-\s]+$/';
-                if(!preg_match($pattern, $val)){
-                    echo "<div>$pattern : $val</div>";
+                if(preg_match($filters[$key], $val)){
                     $invalids[$key]=$val;
                     showTestValidationResult($key,$val);
                 }else{
@@ -144,7 +143,7 @@
     foreach($Invalids as $inv) // 'invalids','taken','xtra'
         if(!empty(${$inv})){ // $invalids, $taken, $xtra
             if($test) {
-                echo "<h4>Невалидные данные (".$inv."):</h4>";
+                echo "<h4>line ".__LINE__.": Невалидные данные ($inv):</h4>";
                 var_dump(${$inv});
             }
             $wrng++;
@@ -152,14 +151,9 @@
                 - пароли при возврате не сохраняют
                 - он уже обработан функцией md5()
             */
-            if( $inv=='invalids'
-                && (isset($invalids['password'])||isset($invalids['password2']))
-              ) {
-                //unset($_SESSION['invalids']['password']);
-                //unset($_SESSION['invalids']['password2']);
-                continue;
-            }else
-                $_SESSION[$inv]=${$inv};
+            if(!( $inv=='invalids'
+                   && (isset($invalids['password'])||isset($invalids['password2']))
+              )) $_SESSION[$inv]=${$inv};
         }
     // если никаких ошибок не выявлено, будем добавлять записи в таблицу:        
     if(!$wrng){
@@ -215,16 +209,18 @@
             т.о., при заполнении ячеек мы должны знать, какие из сохранённых в
             сессии валидны, а какие - нет. */
         unset($_SESSION['valid_data']);
+        //var_dump($_SESSION);
         header("location: ".SITE_ROOT."account?register=ok");        
     }else{
         unset($dataToInsert['password']);
         unset($dataToInsert['password2']);
         $_SESSION['valid_data']=$dataToInsert;
         if($test){
-            echo "<h4>Невалидные данные:</h4>";
+            echo "<h4>line ".__LINE__.": Невалидные данные:</h4>";
             foreach($Invalids as $inv) // 'invalids','taken','xtra'
                 if(isset($_SESSION[$inv])){
-                    echo "<div><b>{$inv}:</b></di>";
+                    echo "<div><b>{$inv}:</b></div>
+                    <h3 style='color:green'>Сохранено в сессии:</h3>";
                     var_dump($_SESSION[$inv]);
                 }
             echo "<div>redirect: <a href=\"".SITE_ROOT."return\">".SITE_ROOT."return</a></div><hr>";

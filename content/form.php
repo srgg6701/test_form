@@ -1,8 +1,8 @@
 <form enctype="multipart/form-data" method="post" id="form" onsubmit="return <? 
     if($section==SIGNUP):
-        ?>validateForm<?
-    else:?>checkCells<?
-    endif;?>()">
+        ?>validateForm<? echo "()\" action=\"scripts/crud.php\"" ;
+    else:?>checkCells()<?
+    endif;?>">
         <div id="lang">
             <span class="strong">
                 <a href="<?=SITE_ROOT?>signup"><?=Signup?></a>
@@ -24,7 +24,7 @@
             <div id="pass_warning" class="right"><?=PassDiff?></div>
             <br/>    
             <span><?=Email?></span>
-                <input placeholder="<?=hintEmail?>" type="text" id="email" name="email" <? fillInputFromSession('email',true);?> />
+            <input required placeholder="<?=hintEmail?>" type="text" id="email" name="email" <? fillInputFromSession('email',true);?> />
             <br/>
             <h5><?=Optional?>:</h5>
             <span>
