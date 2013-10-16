@@ -106,6 +106,10 @@ ul b{
     font-weight: normal;
     margin-right: 10px;
 }
+.invalid, .invalids{
+    background-color: bisque;
+    border-color: red !important;
+}
 .sign,
 .stuff_container{
     border-radius: 8px;

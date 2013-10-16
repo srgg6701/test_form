@@ -98,7 +98,7 @@ function validateForm() {
     try{
         // создадим функцию назначения полю с невалидным значением соответствующего класса:
         var setInvalid = function(element){
-            console.log('element.id = '+element.id);
+            //console.log('element.id = '+element.id);
             document.getElementById(element.id).setAttribute('class','invalid');
         };
         var checkFiltered = function(element){            
@@ -141,15 +141,15 @@ function validateForm() {
                             Функция checkPasswordsIdentity() сверит оба.
                          */
                         // проверить совпадение паролей:
-                        err+=checkPasswordsIdentity();                        
-                    }else
-                        err+=checkFiltered(currentInput);
+                        err+=checkPasswordsIdentity();                         
+                    }
+                    err+=checkFiltered(currentInput);
                 }
             }
         }
     }catch(e){
         console.log('The caught error: '+e.message);
-    }return false;
-    console.log('err = '+err);
+    }
+    //console.log('err = '+err);
     if(err) return false;
 }

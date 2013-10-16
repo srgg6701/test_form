@@ -32,7 +32,7 @@
         if($test) {
             echo "<div>Данные ";
             if(!$valid) echo " <b style='color:red'>НЕ</b> ";
-            echo " валидны:<br>$key => $val</div>";
+            echo " валидны:<br><b>$key</b> => $val</div>";
         }
     }
     
@@ -42,8 +42,14 @@
     // создать массивы неправильных значений
     // (невалидные, занятые, проблемные)
     $Invalids=explode(",",Invalids); //'invalids,taken,xtra'
-    foreach ($Invalids as $invld)
-        ${$invld} = array(); //$invalids, $taken, $xtra
+    foreach ($Invalids as $invld){
+        ${$invld} = array(); //$invalids, $taken, $xtra        
+        unset($_SESSION[$invld]); // удалить старые данные, если остались
+    }
+    unset($_SESSION['valid_data']);
+    //echo "<h1>SESSION:</h1>";
+    //var_dump($_SESSION);
+    //echo "<hr>";
     // контейнер данных для добавления в таблицу:
     $dataToInsert=array();
     foreach ($post as $key => $val){        
@@ -94,7 +100,10 @@
                 }
                 break;
             case 'name': 
-                if(preg_match($filters[$key], $val)){
+                //$filters[$key]
+                $pattern='/^[а-яёА-ЯЁa-zA-Z0-9\-\s]+$/';
+                if(!preg_match($pattern, $val)){
+                    echo "<div>$pattern : $val</div>";
                     $invalids[$key]=$val;
                     showTestValidationResult($key,$val);
                 }else{
@@ -151,9 +160,6 @@
                 continue;
             }else
                 $_SESSION[$inv]=${$inv};
-        }else{
-            if($test) echo "<div>unset (\$_SESSION[$inv]) </div>";
-            unset($_SESSION[$inv]);
         }
     // если никаких ошибок не выявлено, будем добавлять записи в таблицу:        
     if(!$wrng){

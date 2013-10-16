@@ -55,6 +55,7 @@
 					//var_dump ($_SESSION[$invalids]);
 				}
         	}	
-		?>  
+            
+            ?>  
         	</ul>      
         </div>

@@ -60,7 +60,7 @@ $words_content = array(
     'Optional'=>'Необязательные поля>Optional fields',
     // подсказки по допустимым значениям полей (см. функцию JS validateForm()):
     'hintLogin'=>'Буквы (только лат.), цифры, дефисы, подчёркивания и точки>Letters, numbers, hyphens, underscores and dots',       // /[^a-zA-Z0-9\-_\.]/
-    'hintPassword'=>'Буквы и цифры>Letters and numbers',    // /[^a-zA-Z0-9]/
+    'hintPassword'=>'Буквы (только лат.) и цифры>Letters and numbers',    // /[^a-zA-Z0-9]/
     'hintEmail'=>'Укажите свой e-mail>Input here your real e-mail',       // /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
     'hintName'=>'Буквы, цифры, дефисы и пробелы>Letters, numbers, hyphens, and spaces',        // /[^a-zA-Z0-9\-\s]/ 
     'hintPhoneNumber'=>'Цифры и пробелы (необязательно)>Numbers and spaces (optional)', // /[^0-9\s]/
