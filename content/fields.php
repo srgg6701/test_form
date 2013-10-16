@@ -15,6 +15,7 @@ function putLoginAndPassword($section){?>
             echo $second_name;?>" name="password<?
             echo $second_name;?>" <? fillInputFromSession('password', true);?> />  
 <?  };
+    // секция аутентификации
     if($section==SIGNIN){
     ?>
     <div><? 
@@ -28,11 +29,11 @@ function putLoginAndPassword($section){?>
 <?  }
 ?>
     <input required autocomplete="off"<?
-	if($section==SIGNUP){
+	if($section==SIGNUP){ // секция регистрации
 		?> placeholder="<?=hintLogin?>"<? 
 	}?> type="text" id="login" name="login" <? fillInputFromSession('login', true);?> />
     <?  
-    if($section==SIGNIN){
+    if($section==SIGNIN){ // секция аутентификации
         ?>
     <div>
         <?=Password?></div>

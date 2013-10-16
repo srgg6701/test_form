@@ -1,4 +1,4 @@
-<form enctype="multipart/form-data" method="post" id="form" onsubmit="return <? 
+    <form enctype="multipart/form-data" method="post" id="form" onsubmit="return <? 
     if($section==SIGNUP):
         ?>validateForm<? echo "()\" action=\"scripts/actions.php\"" ;
     else:?>checkCells()<?
@@ -15,7 +15,7 @@
             </span>
         </div>
 <?	if(strstr($_SERVER['REQUEST_URI'],"/return"))
-  		require_once 'back_to_form.php';
+  		require_once 'back_to_form.php'; // подключить вывод ошибок
 		
 	if($section=='signup'):?>
         <div class="sign" id="sign_up">

@@ -1,3 +1,4 @@
+// образ формы. Будем размещать внутри объекты массового обращения
 var userForm = new Object();
 
 window.onload=function(){
@@ -21,13 +22,13 @@ window.onload=function(){
         var dropInvalidity = function(){
             var inputs = userForm.inputs;          
             for(var i=0, j=inputs.length; i<j; i++){
-                // добавить наблюдателя к полю:
+                // добавить наблюдателя фокуса к полю для управления стилями ячеек:
                 inputs[i].addEventListener('focus',function(){
                     if(this.type!='submit'){
-                        // назначить класс:
+                        // назначить класс обязательному полю:
                         if(this.getAttribute('required'))
                             this.setAttribute('class', 'req'); 
-                        else
+                        else // удалить у необязательного
                             this.removeAttribute('class');
                     }
                 });            
@@ -46,9 +47,8 @@ window.onload=function(){
         // Дополнительно назначить наблюдателей для полей с паролями для:
         // * Отображения сообщения о несовпадении
         // * Сокрытия сообщения, если поля совпадают
-        // проверка вызывается при потере фокуса
-        // если оба поля для паролей существуют (т.е., мы в процессе регистрации, 
-        // а НЕ авторизации):
+        // проверка вызывается при потере фокуса если оба поля для паролей 
+        // существуют (т.е., мы в процессе регистрации, а НЕ авторизации):
         if(userForm.pass1&&userForm.pass2){
             userForm.pass1.addEventListener('blur', function(){
                     checkPasswordsIdentity(true);
@@ -67,11 +67,13 @@ function checkPasswordsIdentity(blur) {
         if( userForm.pass1.value && userForm.pass2.value    // оба поля заполнены 
             && (userForm.pass1.value!=userForm.pass2.value) // значения различаются
           ){
+            // назначить стилевой атрибут неправильного заполнения
             userForm.pass1.setAttribute('class', 'req invalid');
             userForm.pass2.setAttribute('class', 'req invalid');
+            // отобразить предупреждение:
             userForm.wrnBlock.style.display='block';
-            return 1;
-        }else{
+            return 1; // будет увеличивать счётчик ошибок
+        }else{ // всё ОК
             if(blur){ 
                 // скрыть сообщение о несовпадении паролей:
                 userForm.wrnBlock.style.display='none'; 
@@ -79,7 +81,7 @@ function checkPasswordsIdentity(blur) {
                 userForm.pass1.setAttribute('class', 'req');
                 userForm.pass2.setAttribute('class', 'req');
             }
-            return 0;
+            return 0; // не будет увеличивать счётчик ошибок
         }
     }catch(e){
         console.log(e.message+'\ncheckPasswordsIdentity()');
@@ -108,13 +110,15 @@ function validateForm() {
         // создадим функцию назначения полю с невалидным значением соответствующего класса:
         var setInvalid = function(element){
             var eInput = document.getElementById(element.id);
-            //console.log('element.id = '+element.id);
             var newClassName = (eInput.getAttribute('required'))? 'req invalid':'invalid';
             eInput.setAttribute('class',newClassName);
         };
+        // создадим функцию проверки полей по шаблону:
         var checkFiltered = function(element){
-            console.log('%ccheckFiltered %celement.id = '+element.id, 'color:orange','color:black ');
+            // пропустить повторный пароль, т.к. для него не назначен элемент 
+            // массива фильтров:
             var field =(element.id=="password2")? 'password':element.id;
+            // 2 условия, т.к. фильтры имеют противоположное направление проверки:
             if(filters[field].test(element.value)){
                 if(field=='email'){
                     // 0 ошибок:
@@ -135,22 +139,18 @@ function validateForm() {
         };
         // получить все поля данных и проверить в цикле:
         var currentInput, err=0, inputs = userForm.inputs; 
-        console.log('inputs.length = '+inputs.length);
-        
         for(var i = 0, j=inputs.length; i<j; i++){
             currentInput = inputs[i];
-            console.log('inputs.length html = %c'+inputs[i].outerHTML, 'color:blue;');
+            // не кнопка отправки:
             if(currentInput.getAttribute('type')!='submit'){
-                if(!currentInput.value){
-                    if( currentInput.getAttribute('class')
-                        && currentInput.getAttribute('class').indexOf('req')!=-1
+                if(!currentInput.value){ // поле пусто
+                    if( currentInput.getAttribute('class') // класс назначен (иначе выдаст ошибку)
+                        && currentInput.getAttribute('class').indexOf('req')!=-1 // обязательное поле
                       ){                
-                        console.log('currentInput.id (no value) = '+currentInput.id);
-                        err++;
-                        setInvalid(currentInput);
+                        err++; // инкременировать счётчик ошибок
+                        setInvalid(currentInput); // назначить полю стилевой атрибут ошибки
                     }
                 }else{
-                    //console.log('value is not empty');                    
                     if(currentInput.getAttribute('type')=='password'){
                         /*  Поскольку текущая функция вызывается только при 
                             отправки данных формы, достаточно выполнить этот
@@ -160,14 +160,13 @@ function validateForm() {
                         // проверить совпадение паролей:
                         err+=checkPasswordsIdentity();                         
                     }
-                    console.log('currentInput.id (value exists) = '+currentInput.id);
+                    // в любом случае проверить валидность полей:
                     err+=checkFiltered(currentInput);
                 }
             }
         }
     }catch(e){
         console.log('The caught error: '+e.message);
-    }//return false;
-    //console.log('err = '+err);
-    if(err) return false;
+    }
+    if(err) return false; // всё отменить из-за ошибок.
 }

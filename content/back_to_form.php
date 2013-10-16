@@ -1,10 +1,12 @@
         <div>
             <p class="txtRed"><?=ErrorDuringRegister?>:</p>
             <ul>
-    	<?	$showInvalids=function($invalids){ // выбираются из константы
+    	<?	$showInvalids=function($invalids){ // выбирается с родительской страницы
 				if($invalids=='xtra'):?>
                 <b><?=OtherErrors?>:</b>
 			<?	endif;
+                // перебрать сохранённые невалидные значиения
+                // (см. файл scripts/actions.php, сохранение новой записи)
 				foreach($_SESSION[$invalids] as $field=>$value):
                     if($field!="password2"):
             ?>
@@ -36,7 +38,8 @@
 		<?          endif;
 				endforeach;
 			};
-			$Invalids=explode(",",Invalids); // invalids,taken,xtra
+			// Сгенерировать HTML с сообщением об ошибках:
+            $Invalids=explode(",",Invalids); // invalids,taken,xtra
         	foreach($Invalids as $invalids){
 				if($_SESSION[$invalids]){
 					switch($invalids){
@@ -52,11 +55,7 @@
 						<?	$showInvalids($invalids);							
 						break;
 					}
-					//echo "<div>$invalids</div>";
-					//var_dump ($_SESSION[$invalids]);
 				}
-        	}	
-            
-            ?>  
+        	}?>  
         	</ul>      
         </div>

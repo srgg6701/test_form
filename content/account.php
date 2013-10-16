@@ -6,6 +6,7 @@ if($_POST['btnEnter']) authenticateUser($filters);
 if($_SESSION['user_id']){
     $user_data=getUserData();
     $user_data=$user_data[0];
+    // если пришли после регистрации, сердечно поздравим Юзера:
     if($_GET['register']=='ok'):?>
     <h1 class="superheader"><?=Congratulations?>!</h1>
     <?
