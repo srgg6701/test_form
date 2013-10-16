@@ -103,7 +103,7 @@ function checkCells() {
 /**
  * Проверить валидность значений полей формы при регистрации:
  */
-function validateForm() {   return true;
+function validateForm() {   
     try{
         // создадим функцию назначения полю с невалидным значением соответствующего класса:
         var setInvalid = function(element){

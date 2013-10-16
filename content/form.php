@@ -1,6 +1,6 @@
 <form enctype="multipart/form-data" method="post" id="form" onsubmit="return <? 
     if($section==SIGNUP):
-        ?>validateForm<? echo "()\" action=\"scripts/crud.php\"" ;
+        ?>validateForm<? echo "()\" action=\"scripts/actions.php\"" ;
     else:?>checkCells()<?
     endif;?>">
         <div id="lang">
