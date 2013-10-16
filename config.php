@@ -1,30 +1,33 @@
 <?php
 if(strstr($_SERVER['REQUEST_URI'],'/exit')){
-    session_destroy(); //var_dump($_SESSION);
+    // удалить сохранённые в сессии вводимые юзером данные
+    session_destroy(); 
     session_start();
 }
 
-if(!isset($_SESSION['ROOT']))
+if(!isset($_SESSION['ROOT'])) //установить root сайта:
     $_SESSION['ROOT']='http://localhost/_temp/test/smithandpartners/';
-define('SITE_ROOT', $_SESSION['ROOT']);
-define('URI', $_SERVER['REQUEST_URI']);
+//установить константы для сайта:
+define('SITE_ROOT', $_SESSION['ROOT']); // синоним значения в сессии, для краткости
+define('URI', $_SERVER['REQUEST_URI']); 
 define('LANG1','ru');
 define('LANG2','en');
-define('SIGNIN','signin');
-define('SIGNUP','signup');
-define('PicExt','gif,jpg,png');
+define('SIGNIN','signin');  // раздел аутентификации
+define('SIGNUP','signup');  // раздел регистрации
+define('PicExt','gif,jpg,png'); // допустимые форматы графических файлов
 // типы невалидных данных: 
 // * недопустимые символы
 // * занятые значения
 // * проблемные записи (напр., - несвпадение паролей при регистрации)
 define('Invalids','invalids,taken,xtra');
-
+// используемые языки
 if(preg_match('/\/'.LANG2.'\b/',URI))
     $lang=LANG2;
 elseif(preg_match('/\/'.LANG1.'\b/',URI))
     $lang=LANG1;
     
-if(!$lang){
+if(!$lang){ // метку языка не передавали явно (в URI):
+    // сохраним в переменной активный язык сайта:
     if(isset($_SESSION['LANG']))
         $lang = $_SESSION['LANG'];
     else
@@ -32,9 +35,10 @@ if(!$lang){
 }else{
     $_SESSION['LANG']=$lang;
 }
-
+// сохранить в переменно текущий раздел (аутентификация/регистрация):
 $section = (preg_match('/\/signin\b/',URI))?  SIGNIN: SIGNUP;
-
+// если аутентификация, удалим (если есть) из сессии невалидные значения, 
+// полученные после попытки регистрации:
 if($section == SIGNIN){
     $sInvalids=explode(",", Invalids);
     foreach($sInvalids as $invalid)
@@ -88,7 +92,7 @@ $words_content = array(
     'ErrorDuringRegister'=>'Во время регистрации возникли ошибки. Пожалуйста, исправьте их и попробуйте снова>Some errors occurred while registration. Please, fix them and try again',
     'OtherErrors'=>'Прочие ошибки>Other errors'
 );
-
+// сохранить словарь в константах для дальнейшего использования на стр.
 foreach ($words_content as $mask=>$words){
     $seppos = strpos($words, ">");
     $content = ($lang==LANG1)? 
@@ -96,7 +100,6 @@ foreach ($words_content as $mask=>$words){
         : substr($words, $seppos+1);
     define($mask,$content);
 }
-
 // создать универсальные (php/js) фильтры валидации:
 $filters = array(
     'login'         =>"/[^a-zA-Z0-9\-_\.]/",

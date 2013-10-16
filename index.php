@@ -1,5 +1,6 @@
 <?  session_start();
     require_once 'config.php';
+	// файл с HTML (форма и т.п.)
     require_once 'content/fields.php';	?>
 <!DOCTYPE html>
 <html>
@@ -7,22 +8,24 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><?=TestFormPage?></title>
         <link href="css/default.css" rel="stylesheet"/>
-    <?  if($section==SIGNIN):?>
+    <?  if($section==SIGNIN): 
+		// если форма авторизации, подключим корректирующие стили:?>
         <link href="css/signin.css" rel="stylesheet"/>
-    <?  endif;?>
+    <?  endif;
+		// создать фильтры для валидации значений полей формы:?>
 		<script>
-		var filters = [];
-		// создать фильтры для валидации значений полей:
+		var filters = [];		
 	<?	foreach($filters as $filter=>$pattern):
 	?>
 	filters['<?=$filter?>']=<?=$pattern?>;
 	<?	endforeach;
 	?>
-	</script>
+		</script>
 		<script type="text/javascript" src="js/js.js"></script>
     </head>
     <body> 
-    <?  $file_name=(isset($_POST['btnEnter'])||strstr($_SERVER['REQUEST_URI'], '/account'))? 
+    <?  // подключение либо аккаунта юзера, либо файла с формой
+		$file_name=(isset($_POST['btnEnter'])||strstr($_SERVER['REQUEST_URI'], '/account'))? 
 			'account':'form'; 
 		require_once 'content/'.$file_name.'.php';?>
     </body>
