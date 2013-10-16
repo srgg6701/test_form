@@ -30,7 +30,7 @@
             <span>
                 <span title="<?=hintName?>"><?=Name?></span>
             </span>
-                <input placeholder="<?=hintName?>" type="text" id="name" name="name" <? fillInputFromSession($name);?> />
+                <input placeholder="<?=hintName?>" type="text" id="name" name="name" <? fillInputFromSession('name');?> />
             <span>    
                 <span title="<?=hintPhoneNumber?>"><?=PhoneNumber?></span>
             </span>
@@ -47,7 +47,7 @@
         <div class="sign" id="sign_in">
             <?  putLoginAndPassword($section);?>                    
             <br/>
-            <input id="btnEnter" type="submit" value="<?=Enter?>">
+            <input id="btnEnter" name="btnEnter" type="submit" value="<?=Enter?>">
         </div>
     <?  endif?>
     </form>

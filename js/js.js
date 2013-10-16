@@ -99,7 +99,7 @@ function validateForm() {
         // создадим функцию назначения полю с невалидным значением соответствующего класса:
         var setInvalid = function(element){
             console.log('element.id = '+element.id);
-            document.getElementById(element.id).setAttribute('class','req invalid');
+            document.getElementById(element.id).setAttribute('class','invalid');
         };
         var checkFiltered = function(element){            
             if(filters[element.id].test(element.value)){
@@ -126,7 +126,9 @@ function validateForm() {
             currentInput = inputs[i];
             if(currentInput.getAttribute('type')!='submit'){
                 if(!currentInput.value){
-                    if(currentInput.getAttribute('class').indexOf('req')!=-1){                
+                    if( currentInput.getAttribute('class')
+                        && currentInput.getAttribute('class').indexOf('req')!=-1
+                      ){                
                         err++;
                         setInvalid(currentInput);
                     }
@@ -147,7 +149,7 @@ function validateForm() {
         }
     }catch(e){
         console.log('The caught error: '+e.message);
-    }
+    }return false;
     console.log('err = '+err);
     if(err) return false;
 }

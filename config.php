@@ -1,4 +1,6 @@
 <?php
+if(strstr($_SERVER['REQUEST_URI'],'/exit'))
+    session_destroy(); //var_dump($_SESSION);
 if(!isset($_SESSION['ROOT']))
     $_SESSION['ROOT']='http://localhost/_temp/test/smithandpartners/';
 define('SITE_ROOT', $_SESSION['ROOT']);
@@ -29,7 +31,7 @@ if(!$lang){
 }
 
 $section = (preg_match('/\/signin\b/',URI))?  SIGNIN: SIGNUP;
-
+// добавить маски для контента (рус/англ):
 $words_content = array(
     'Signup'=>'Регистрация>Sign Up',
     'Signin'=>'Вход>Sign In',
@@ -40,6 +42,16 @@ $words_content = array(
     'Email'=>'E-mail>E-mail',
     'Name'=>'Ваше имя>Your name',
     'PhoneNumber'=>'№ телефона># phone',
+    'RegisterDate'=>'Дата регистрации>Date of registration',
+    'NotGiven'=>'Не предоставлено>Not given',
+    'Congratulations'=>'Поздравляем с успешной регистрацией>Thank you for joining us',
+    'YourData'=>'Ваши данные>Your data',
+    'YourPix'=>'Ваши изображения>Your images',
+    'YouAreUnknown'=>'К сожалению, вы не идентифицированы>Sorry, but you have not been identified...',
+    'GoAway'=>'Выйти>Exit',
+    'Home'=>'На главную>Home',
+    'TryAgain'=>'Повторить попытку>Try again',
+    'TestFormPage'=>'Тестовая страница>Test Form Page',
     // конец полей
     'Orx'=>' или > or ',
     'Enter'=>'Войти>Enter',

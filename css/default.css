@@ -87,20 +87,32 @@ ul b{
     text-align: center;
     width: auto;
 }
+.bleek{
+    border: none;
+    color: #666;
+}
 .clearBoth{
     clear: both;
 }
-.invalid, .invalids{
-    background-color: bisque;
-    border-color: red !important;
+.common_container,
+.stuff_container{
+    margin: auto;
+    max-width: 800px;
+    padding: 10px;
+    width: 80%;
 }
-.txtRed{
-    color: red;
+.exit{
+    float: right;
+    font-weight: normal;
+    margin-right: 10px;
+}
+.sign,
+.stuff_container{
+    border-radius: 8px;
+    border: solid 2px #9D95B3;
 }
 .sign{
     background-color: #EAE4FA;
-    border-radius: 8px;
-    border: solid 2px #9D95B3;
 }
 .sign >span, 
 .sign >div{
@@ -117,8 +129,41 @@ ul b{
 .strong{
     font-weight: bold;
 }
+.stuff_container:after{
+    content: " ";
+    display: block;
+    clear: both;
+}
+.stuff_container > div:after{
+    content:" ";
+    clear: both;
+    display: block;
+}
+.stuff_container > div:nth-child(odd){
+    background-color: #F2EFFA;
+}
+.stuff_container > div >span:last-child{
+    float:right;
+    font-weight: bold;
+    text-align: left;
+    width: 60%;
+}
+.stuff_container >img{
+    max-width: 100%;
+}
+.subheader{
+    margin-bottom: 0;
+}
+.superheader{
+    color:#9D95B3;
+    font-size: 1.1em;
+    margin: 10px auto 24px;
+}
 .taken{
     background-color: #e6e6e6;
+}
+.txtRed{
+    color: red;
 }
 .xtra{
     background-color: lightyellow;

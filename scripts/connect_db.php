@@ -34,10 +34,4 @@ class Db{
 		}else
 			return $rows;
 	}
-	
-	private function showError($Db){
-		echo '<br>execute has failed: </br>';
-		var_dump($Db->errorInfo());
-		die();
-	}
 }?>

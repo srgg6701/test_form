@@ -1,4 +1,5 @@
 <?php
+require_once dirname(__FILE__).'/../scripts/connect_db.php';
 /**
  * Разместить в HTML повторяющие для обеих секций (регистрация/авторизация) 
  * элементы (логин, пароль)
@@ -49,7 +50,7 @@ function putLoginAndPassword($section){?>
 
 /**
  * Заполнить значения формы данными (включая  невалидные), размещёнными в сессии
- * в случае возврата к заполнению формы из-за обнаруженных невалидных данных:
+ * в случае принудительного возврата к заполнению формы из-за обнаруженных проблем:
  */
 function fillInputFromSession($name,$req=false){
     $xtraClass=null; // имя класса для дополнительной раскраски ячеек, чтоб юзер 
@@ -75,17 +76,81 @@ function fillInputFromSession($name,$req=false){
         echo " class=\"$xtraClass\"";
 }
 
-function getUserData($user_id=false){
-    if(!$user_id)
-        $user_id=$_SESSION['user_id'];
-    require_once dirname(__FILE__).'/../connect_db.php';
+/**
+ * Аутентифицировать юзера:
+ */
+function authenticateUser($filters){
+    $xtra_subquery = ''; // может понадобиться подзапрос
+    $login=$_POST['login'];
+    $field=false;
+    // сначала выяснить, что он ввёл в качестве логина - 
+    // собственно логин, емэйл или тел.
+    // сначала емэйл:
+    if(preg_match($filters['email'], $login))
+        $field='email';
+    // лигин, тел.:
+    elseif(!preg_match($filters['login'], $login)){
+        // тел.
+        if(preg_match($filters['phone'], $login)) 
+            $field='login'; // если проверку на тел.номер не прошли, остался логин.
+        else{ // иначе - возможен тел., т.к. шаблон для логина может его покрыть
+            // удалить все пробелы из полученного "№ тел.".
+            // то же самое будем делать при запросе, чтобы сравнить только те
+            // символы, наличие которых обязательно
+            $xtra_subquery = " OR REPLACE(phone,' ','') = '" .  
+                               str_replace(" ", "", $login) . "'";
+        }
+    }
+    if($field){ // если определили тип поля
+        $Db=new Db();
+        $query="SELECT id FROM users 
+     WHERE ($field = '$_POST[login]'{$xtra_subquery}) 
+       AND password = MD5('$_POST[password]')";
+        // сохранить Id юзера в сессии:
+        if(!$_SESSION['user_id']=$Db->getConnect()->query($query)->fetchColumn())
+            return false;
+    }
+}
+/**
+ * Показать основные данные юзера:
+ */
+function showMainUserData($arrUserFields,$user_data){
+    $arrUserFields=array(
+        'login' =>      Login, 
+        'email' =>      Email, 
+        'name' =>       Name, 
+        'phone' =>      PhoneNumber, 
+        'datetime' =>   RegisterDate    
+    );
+    foreach ($user_data as $field=>$value):
+        if(key_exists($field, $arrUserFields)):?>
+        <div>
+            <span><?=$arrUserFields[$field]?>:</span>
+            <span><? 
+            if($field=='datetime'&&$value)
+                $value=date('d.m.Y',strtotime($value));
+            echo $value? $value:'<span class="bleek">'.NotGiven.'</span>'; ?></span>
+        </div>
+    <?  endif;
+    endforeach;
+}
+/**
+ * Показать изображения юзера:
+ */
+function showUserPix(&$user_data){
+    if($user_data['user_id']):
+    ?><img src="content/files/<?=$user_data['user_id'] .
+            substr($user_data['filename'],strripos($user_data['filename'],"."));?>" />
+    <?    
+    endif;
+}
+/**
+ * Извлечь данные юзера:
+ */
+function getUserData(){
     $Db=new Db();
 	$connect=$Db->getConnect();
-    $query="SELECT * FROM users 
-                           LEFT JOIN pix ON pix.user_id = users.id
-                          WHERE users.id = ".$user_id;
-    $result=$Db->query($query)->fetchAll(PDO::FETCH_ASSOC);
-    if($cnt&&$test)
-            echo "<div>Запись НЕ уникальна. Всего записей: $cnt</div>";        
-        return $cnt;
+    $query="SELECT * FROM users LEFT JOIN pix ON pix.user_id = users.id
+                     WHERE users.id = ".$_SESSION['user_id'];
+    return $connect->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
