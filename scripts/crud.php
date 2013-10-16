@@ -1,6 +1,6 @@
 <?	require_once 'connect_db.php';
 
-    $test=true;
+    $test=false;
 	if($test){
         var_dump($post);
         var_dump($_FILES['pic']);
@@ -209,8 +209,7 @@
             т.о., при заполнении ячеек мы должны знать, какие из сохранённых в
             сессии валидны, а какие - нет. */
         unset($_SESSION['valid_data']);
-        header("location: ".SITE_ROOT."account/?register=ok");
-        
+        header("location: ".SITE_ROOT."account?register=ok");        
     }else{
         unset($dataToInsert['password']);
         unset($dataToInsert['password2']);

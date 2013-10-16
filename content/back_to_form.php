@@ -32,7 +32,7 @@
 						break;
 					
 					}?></li>
-		<?
+		<?		
 				endforeach;
 			};
 			$Invalids=explode(",",Invalids); // invalids,taken,xtra

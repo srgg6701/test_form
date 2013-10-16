@@ -74,3 +74,18 @@ function fillInputFromSession($name,$req=false){
     elseif($xtraClass)
         echo " class=\"$xtraClass\"";
 }
+
+function getUserData($user_id=false){
+    if(!$user_id)
+        $user_id=$_SESSION['user_id'];
+    require_once dirname(__FILE__).'/../connect_db.php';
+    $Db=new Db();
+	$connect=$Db->getConnect();
+    $query="SELECT * FROM users 
+                           LEFT JOIN pix ON pix.user_id = users.id
+                          WHERE users.id = ".$user_id;
+    $result=$Db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    if($cnt&&$test)
+            echo "<div>Запись НЕ уникальна. Всего записей: $cnt</div>";        
+        return $cnt;
+}
