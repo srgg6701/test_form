@@ -6,33 +6,34 @@
                 <b><?=OtherErrors?>:</b>
 			<?	endif;
 				foreach($_SESSION[$invalids] as $field=>$value):
-			?>
-					<li><?
-					switch($field){
-						case 'login':
-							echo WrongLogin;
-						break;
-						case 'password':
-							echo WrongPassword;
-						break;
-						case 'pass_diff':
-							echo PassDiff;
-						break;
-						case 'email':
-							echo WrongEmail;
-						break;
-						case 'name':
-							echo WrongName;
-						break;
-						case 'phone':
-							echo WrongPhoneNumber;
-						break;
-						case 'wrong_pic':
-							echo WrongPicExt;
-						break;
-					
-					}?></li>
-		<?		
+                    if($field!="password2"):
+            ?>
+					<li><?          
+                        switch($field){
+                            case 'login':
+                                echo WrongLogin;
+                            break;
+                            case 'password':
+                                echo WrongPassword;
+                            break;
+                            case 'pass_diff':
+                                echo PassDiff;
+                            break;
+                            case 'email':
+                                echo WrongEmail;
+                            break;
+                            case 'name':
+                                echo WrongName;
+                            break;
+                            case 'phone':
+                                echo WrongPhoneNumber;
+                            break;
+                            case 'wrong_pic':
+                                echo WrongPicExt;
+                            break;
+
+                        }?></li>
+		<?          endif;
 				endforeach;
 			};
 			$Invalids=explode(",",Invalids); // invalids,taken,xtra

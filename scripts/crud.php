@@ -29,7 +29,7 @@
     /**
      * Вывести результат валидации в тестовом режиме:
      */
-    function showTestValidationResult($key,$val,$valid=true){
+    function showTestValidationResult($key,$val,$valid=false){
         global $test;
         if($test) {
             echo "<div>Данные ";
@@ -140,21 +140,25 @@
     $wrng=0;
     // сохранить невалидные данные в сессии, чтобы показать юзеру при возврате
     // или удалить старые данные из сессии, если всё ОК.
-    foreach($Invalids as $inv) // 'invalids','taken','xtra'
+    foreach($Invalids as $inv) { // 'invalids','taken','xtra'
         if(!empty(${$inv})){ // $invalids, $taken, $xtra
             if($test) {
                 echo "<h4>line ".__LINE__.": Невалидные данные ($inv):</h4>";
                 var_dump(${$inv});
             }
+            
+            $_SESSION[$inv]=${$inv};
             $wrng++;
-            /*  данные пароля добавлять в сессию не будем, поскольку:
-                - пароли при возврате не сохраняют
-                - он уже обработан функцией md5()
-            */
+            
             if(!( $inv=='invalids'
                    && (isset($invalids['password'])||isset($invalids['password2']))
               )) $_SESSION[$inv]=${$inv};
+            
+            echo '<h3>invalid type: '.$inv.'</h3>';
+            var_dump($_SESSION[$inv]);
+            var_dump(${$inv});
         }
+    }
     // если никаких ошибок не выявлено, будем добавлять записи в таблицу:        
     if(!$wrng){
         $keys=$vals=array();
@@ -211,9 +215,15 @@
         unset($_SESSION['valid_data']);
         //var_dump($_SESSION);
         header("location: ".SITE_ROOT."account?register=ok");        
-    }else{
+    }else{        
+        /*  удалить из сессии и массивов валидных данных пароли, поскольку:
+            - пароль уже обработан функцией md5()
+            - пароли при возврате (к форме) не сохраняют */
         unset($dataToInsert['password']);
         unset($dataToInsert['password2']);
+        unset($_SESSION['invalid']['password']);
+        unset($_SESSION['invalid']['password2']);
+        
         $_SESSION['valid_data']=$dataToInsert;
         if($test){
             echo "<h4>line ".__LINE__.": Невалидные данные:</h4>";

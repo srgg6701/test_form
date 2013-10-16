@@ -3,6 +3,7 @@ if(strstr($_SERVER['REQUEST_URI'],'/exit')){
     session_destroy(); //var_dump($_SESSION);
     session_start();
 }
+
 if(!isset($_SESSION['ROOT']))
     $_SESSION['ROOT']='http://localhost/_temp/test/smithandpartners/';
 define('SITE_ROOT', $_SESSION['ROOT']);
@@ -33,6 +34,13 @@ if(!$lang){
 }
 
 $section = (preg_match('/\/signin\b/',URI))?  SIGNIN: SIGNUP;
+
+if($section == SIGNIN){
+    $sInvalids=explode(",", Invalids);
+    foreach($sInvalids as $invalid)
+        unset($_SESSION[$invalid]);
+}
+
 // Создадим рус-англ. словарь:
 $words_content = array(
     'Signup'=>'Регистрация>Sign Up',

@@ -86,12 +86,15 @@ function authenticateUser($filters){
     // сначала емэйл:
     if(preg_match($filters['email'], $login))
         $field='email';
-    // лигин, тел.:
+    // лигин ИЛИ тел.:
     elseif(!preg_match($filters['login'], $login)){
         // тел.
-        if(preg_match($filters['phone'], $login)) 
-            $field='login'; // если проверку на тел.номер не прошли, остался логин.
-        else{ // иначе - возможен тел., т.к. шаблон для логина может его покрыть
+        if(!preg_match($filters['phone'], $login)) // телефон
+            $field='phone'; // если проверку на тел.номер не прошли, остался логин.
+        else{ 
+            // иначе - возможен тел., т.к. шаблон для логина может его покрыть
+            // т.е., опять-таки, ИЛИ -тел., ИЛИ -логин.
+            $field='login'; // первое поле - логин
             // удалить все пробелы из полученного "№ тел.".
             // то же самое будем делать при запросе, чтобы сравнить только те
             // символы, наличие которых обязательно
@@ -103,7 +106,7 @@ function authenticateUser($filters){
         $Db=new Db();
         $query="SELECT id FROM users 
      WHERE ($field = '$_POST[login]'{$xtra_subquery}) 
-       AND password = MD5('$_POST[password]')";
+       AND password = MD5('$_POST[password]')"; 
         // сохранить Id юзера в сессии:
         if(!$_SESSION['user_id']=$Db->getConnect()->query($query)->fetchColumn())
             return false;
