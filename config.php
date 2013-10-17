@@ -6,7 +6,7 @@ if(strstr($_SERVER['REQUEST_URI'],'/exit')){
 }
 
 if(!isset($_SESSION['ROOT'])) //установить root сайта:
-    $_SESSION['ROOT']='http://localhost/_temp/test/smithandpartners/';
+    $_SESSION['ROOT']='http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], "/")).'/';
 //установить константы для сайта:
 define('SITE_ROOT', $_SESSION['ROOT']); // синоним значения в сессии, для краткости
 define('URI', $_SERVER['REQUEST_URI']); 
